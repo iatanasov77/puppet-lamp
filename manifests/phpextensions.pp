@@ -1,12 +1,12 @@
 
 class vs_lamp::phpextensions (
-    Array $phpModules               = [],
+    Array $phpModules                   = [],
     
-    String xdebugTraceOutputName    = 'trace.out',
-    String xdebugTraceOutputDir     = '/home/nickname/Xdebug',
-    String xdebugProfilerEnable     = '0',
-    String xdebugProfilerOutputName = 'cachegrind.out',
-    String xdebugProfilerOutputDir  = '/home/nickname/Xdebug',
+    String $xdebugTraceOutputName       = 'trace.out',
+    String $xdebugTraceOutputDir        = '/home/nickname/Xdebug',
+    String $xdebugProfilerEnable        = '0',
+    String $xdebugProfilerOutputName    = 'cachegrind.out',
+    String $xdebugProfilerOutputDir     = '/home/nickname/Xdebug',
 ) {
 
 
