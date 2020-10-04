@@ -1,19 +1,19 @@
 class vs_lamp (
-    Array $apacheModules            = [],
-    String $phpVersion              = '7.2',
+    Array $apacheModules                = [],
+    String $phpVersion                  = '7.2',
     
-    String $mysqlService            = 'mysqld',
-    String $mysqllRootPassword      = 'vagrant',
+    String $mysqlService                = 'mysqld',
+    String $mysqllRootPassword          = 'vagrant',
     
-    Array $phpModules               = [],
-    Boolean $phpunit                = false,
-    Hash $phpSettings               = {},
+    Array $phpModules                   = [],
+    Boolean $phpunit                    = false,
+    Hash $phpSettings                   = {},
     
-    String xdebugTraceOutputName    = 'trace.out',
-    String xdebugTraceOutputDir     = '/home/nickname/Xdebug',
-    String xdebugProfilerEnable     = '0',
-    String xdebugProfilerOutputName = 'cachegrind.out',
-    String xdebugProfilerOutputDir  = '/home/nickname/Xdebug',
+    String $xdebugTraceOutputName       = 'trace.out',
+    String $xdebugTraceOutputDir        = '/home/nickname/Xdebug',
+    String $xdebugProfilerEnable        = '0',
+    String $xdebugProfilerOutputName    = 'cachegrind.out',
+    String $xdebugProfilerOutputDir     = '/home/nickname/Xdebug',
 ) {
 	class { '::vs_lamp::apache':
         apacheModules   => $apacheModules,
