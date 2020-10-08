@@ -8,7 +8,7 @@ class vs_lamp::apache_vhost (
 
     $directories    = [
         {
-            path            => "${documentRoot}"
+            path            => "${documentRoot}",
             allow_override  => ['All'],
             'Require'       => 'all granted',
             rewrites        => vs_devenv::apache_rewrite_rules( $needRewriteRules )
