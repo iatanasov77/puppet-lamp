@@ -3,15 +3,17 @@
 #
 #########################################################################
 function vs_lamp::apache_vhost_fpm_proxy( String $fpmSocket ) {
-
-    if ( ! empty( $fpmSocket ) ) {
-        <Proxy \"unix:${fpmSocket}|fcgi://php-fpm\">
-           ProxySet disablereuse=off
-        </Proxy>
     
-        <FilesMatch \.php$>
-            SetHandler proxy:fcgi://php-fpm
-        </FilesMatch>
+    if ( ! empty( $fpmSocket ) ) {
+        '
+            <Proxy "unix:${fpmSocket}|fcgi://php-fpm">
+               ProxySet disablereuse=off
+            </Proxy>
+        
+            <FilesMatch \.php$>
+                SetHandler proxy:fcgi://php-fpm
+            </FilesMatch>
+        '
     }
     
 }
