@@ -1,7 +1,7 @@
 class vs_lamp::apache_vhost (
     String $hostName,
     String $documentRoot,
-    String $fpmSocket           = Null,
+    String $fpmSocket,
     Boolean $needRewriteRules   = false,
     Array $aliases              = [],
 ) {

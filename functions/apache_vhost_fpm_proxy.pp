@@ -4,19 +4,14 @@
 #########################################################################
 function vs_lamp::apache_vhost_fpm_proxy( String? $fpmSocket ) {
 
-    if ( $fpmSocket ) {
-        [
-            {
-                comment      => 'Standart Rewrite Rules',
-                rewrite_base => '/',
-                rewrite_rule => ['^index\.html$ - [L]'],
-            },
-            {
-                comment      => 'Application Rewrite Rules',                
-                rewrite_cond => ['%{REQUEST_FILENAME} !-f', '%{REQUEST_FILENAME} !-d'],
-                rewrite_rule => ['. /index.html [L]'],
-            }
-        ]
+    if ( ! empty( $fpmSocket ) ) {
+        <Proxy \"unix:${fpmSocket}|fcgi://php-fpm\">
+           ProxySet disablereuse=off
+        </Proxy>
+    
+        <FilesMatch \.php$>
+            SetHandler proxy:fcgi://php-fpm
+        </FilesMatch>
     }
     
 }
