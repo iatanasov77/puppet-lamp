@@ -1,4 +1,4 @@
-class vs_lamp::apache_vhost (
+define vs_lamp::apache_vhost (
     String $hostName,
     String $documentRoot,
     String $fpmSocket           = '',
