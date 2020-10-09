@@ -4,12 +4,7 @@ class vs_lamp::php (
     Array $phpModules,
     Boolean $phpunit,
     Hash $phpSettings,
-    Boolean $forcePhp7Repo,
 ) {
-
-    if ( $forcePhp7Repo ) {
-        include vs_lamp::php::php7_repo
-    }
 
     # PHP Modules
     $modules = {}

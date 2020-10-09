@@ -8,7 +8,6 @@ class vs_lamp (
     Array $phpModules                   = [],
     Boolean $phpunit                    = false,
     Hash $phpSettings                   = {},
-    Boolean $forcePhp7Repo              = true,
     
     String $xdebugTraceOutputName       = 'trace.out',
     String $xdebugTraceOutputDir        = '/home/nickname/Xdebug',
@@ -31,7 +30,6 @@ class vs_lamp (
         phpModules      => $phpModules,
         phpunit         => $phpunit,
         phpSettings     => $phpSettings,
-        forcePhp7Repo   => $forcePhp7Repo,
     }
 	
 	class { '::vs_lamp::phpextensions':
