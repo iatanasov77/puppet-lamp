@@ -4,20 +4,12 @@ class vs_lamp::php (
     Array $phpModules,
     Boolean $phpunit,
     Hash $phpSettings,
+    Boolean $forcePhp7Repo,
 ) {
 
-
-/*
-    $repo   = sprintf( 'remi-php%s', regsubst( String( $vsConfig['phpVersion'] ), '.', '', 'G' ) )
-    
-    Yumrepo { "${repo}":
-        descr      => 'Remi\'s PHP 7 RPM repository for CentOS 7',
-        #mirrorlist => 'http://cdn.remirepo.net/enterprise/7/php72/mirror',
-        enabled    => 1,
-        gpgcheck   => 1,
-        gpgkey     => 'http://rpms.remirepo.net/RPM-GPG-KEY-remi'
+    if ( $forcePhp7Repo ) {
+        include vs_lamp::php::php7_repo
     }
-*/
 
     # PHP Modules
     $modules = {}
@@ -36,10 +28,6 @@ class vs_lamp::php (
         })
     }
 
-#    class { '::php::globals':
-#        php_version => '7.2',
-#        #config_root => '/etc/php/7.0',
-#    }->
     class { '::php':
         ensure       => latest,
         manage_repos => true,
