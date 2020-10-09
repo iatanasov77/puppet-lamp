@@ -3,7 +3,7 @@
 class vs_lamp::php::php7_repo
 {
     
-    if $::operatingsystem == 'CentOS' && $::operatingsystemmajrelease == '7' {
+    if $::operatingsystem == 'CentOS' and $::operatingsystemmajrelease == '7' {
     
         if ! defined( Package['epel-release'] ) {
             Exec { 'Import RPM GPG KEYS':
