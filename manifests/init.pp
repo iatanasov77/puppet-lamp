@@ -2,12 +2,14 @@ class vs_lamp (
     Array $apacheModules                = [],
     String $phpVersion                  = '7.2',
     
-    String $mysqlService                = 'mysqld',
     String $mysqllRootPassword          = 'vagrant',
+    String $mysqlPackageName            = '',
+    String $mysqlService                = '',
     
     Array $phpModules                   = [],
-    Boolean $phpunit                    = false,
     Hash $phpSettings                   = {},
+    Boolean $phpunit                    = false,
+    Boolean $phpManageRepos             = true,
     
     String $xdebugTraceOutputName       = 'trace.out',
     String $xdebugTraceOutputDir        = '/home/nickname/Xdebug',
@@ -21,11 +23,13 @@ class vs_lamp (
     }
 	
 	class { '::vs_lamp::mysql':
-        mysqlService    => $mysqlService,
-        rootPassword    => $mysqllRootPassword,
+        rootPassword            => $mysqllRootPassword,
+        mysqlPackageName        => $mysqlPackageName,
+        mysqlService            => $mysqlService,
     }
 	
 	class { '::vs_lamp::php':
+        phpManageRepos  => $phpManageRepos,
         phpVersion      => $phpVersion,
         phpModules      => $phpModules,
         phpunit         => $phpunit,
@@ -47,5 +51,7 @@ class vs_lamp (
         auto_update => true
     }
 
-	class { '::phpmyadmin': }
+	class { '::phpmyadmin': 
+	   require  => [ Class['vs_lamp::php'] ],
+	}
 }

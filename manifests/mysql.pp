@@ -1,26 +1,17 @@
 class vs_lamp::mysql (
-    String $mysqlService,
     String $rootPassword,
+    String $mysqlPackageName,
+    String $mysqlService,
 ) {
-	# Install and setup MySql server
-	exec { 'mkdir -p /var/log/mariadb':
-		path     => '/usr/bin:/usr/sbin:/bin',
-		provider => shell
+	# May some bug on CentOS7 only but i dont know
+	exec { "Create path: '/var/log/mariadb'":
+        command => 'mkdir -p /var/log/mariadb'
 	}
 	
 	class { 'mysql::server':
-	   service_name        => $vsConfig['mysqlService'],
 	   create_root_user    => true,
-	   root_password       => 'vagrant',
+       root_password       => $rootPassword,
+	   package_name        => $mysqlPackageName,
+	   service_name        => $mysqlService,
 	}
-	
-	/*
-	mysql::db { 'devenv_task':
-		user		=> 'root',
-		password	=> 'vagrant',
-		host		=> "${mysqlhost}",
-		grant		=> ['ALL'],
-		sql			=> "${mysqldump}"
-	}
-    */
 }

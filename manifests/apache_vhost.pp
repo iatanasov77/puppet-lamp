@@ -4,25 +4,9 @@ define vs_lamp::apache_vhost (
     String $fpmSocket           = '',
     Boolean $needRewriteRules   = false,
     Array $aliases              = [],
+    Array $directories          = [],
 ) {
 
-    $directories    = [
-        {
-            path            => "${documentRoot}",
-            allow_override  => ['All'],
-            'Require'       => 'all granted',
-            rewrites        => vs_devenv::apache_rewrite_rules( $needRewriteRules )
-        }
-    ]
-    
-    $aliases.each|Hash $alias| {
-        $directories << {
-            'path'              => $alias['path'],
-            'allow_override'    => ['All'],
-            'Require'           => 'all granted',
-        }
-    }
-    
     apache::vhost { "${hostName}":
         serveraliases   => [
             "www.${hostName}",
@@ -34,7 +18,14 @@ define vs_lamp::apache_vhost (
         override        => 'all',
         
         aliases         => $aliases,
-        directories     => $directories,
+        directories     => $directories + [
+            {
+                'path'              => "${documentRoot}",
+                'allow_override'    => ['All'],
+                'Require'           => 'all granted',
+                'rewrites'          => vs_devenv::apache_rewrite_rules( $needRewriteRules )
+            }
+        ],
         
         custom_fragment => vs_lamp::apache_vhost_fpm_proxy( $fpmSocket ),
         

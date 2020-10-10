@@ -2,8 +2,9 @@
 class vs_lamp::php (
     String $phpVersion,
     Array $phpModules,
-    Boolean $phpunit,
     Hash $phpSettings,
+    Boolean $phpunit,
+    Boolean $phpManageRepos,
 ) {
 
     # PHP Modules
@@ -25,7 +26,7 @@ class vs_lamp::php (
 
     class { '::php':
         ensure       => latest,
-        manage_repos => true,
+        manage_repos => $phpManageRepos,
         fpm          => true,
         dev          => true,
         composer     => true,
