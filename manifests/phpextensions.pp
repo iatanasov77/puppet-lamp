@@ -8,7 +8,16 @@ class vs_lamp::phpextensions (
     String $xdebugProfilerOutputName    = 'cachegrind.out',
     String $xdebugProfilerOutputDir     = '/home/nickname/Xdebug',
 ) {
-
+	if ( 'intl' in $phpModules )
+    {
+    	# I don't know why this extension is not installed by voxpopuli/php module on CentOs 7
+    	########################################################################################
+        if ! defined(Package['php-intl']) {
+            Package { 'php-intl':
+                ensure => present,
+            }
+        }
+    }
 
     if ( 'apc' in $phpModules )
     {
