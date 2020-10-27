@@ -30,7 +30,7 @@ class vs_lamp::phpextensions (
         }
     }
 
-    if ( 'xdebug' in $vsConfig['phpModules'] )
+    if ( 'xdebug' in $phpModules )
     {
         class { 'vs_lamp::xdebug':
             # Tracer default settings
