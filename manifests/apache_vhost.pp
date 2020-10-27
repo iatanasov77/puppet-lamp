@@ -1,7 +1,7 @@
 define vs_lamp::apache_vhost (
     String $hostName,
     String $documentRoot,
-    String $customFragment      = Null,
+    $customFragment             = undef,
     Boolean $needRewriteRules   = false,
     Array $aliases              = [],
     Array $directories          = [],
