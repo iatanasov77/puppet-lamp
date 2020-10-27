@@ -1,10 +1,11 @@
 define vs_lamp::apache_vhost (
     String $hostName,
     String $documentRoot,
-    String $fpmSocket           = '',
+    String $customFragment      = Null,
     Boolean $needRewriteRules   = false,
     Array $aliases              = [],
     Array $directories          = [],
+    String $logLevel            = 'debug',
 ) {
 
     apache::vhost { "${hostName}":
@@ -27,9 +28,9 @@ define vs_lamp::apache_vhost (
             }
         ],
         
-        custom_fragment => vs_lamp::apache_vhost_fpm_proxy( $fpmSocket ),
+        custom_fragment => $customFragment,
         
-        log_level       => 'debug',
+        log_level       => $logLevel,
     }
     
     # Create cache/log dir
