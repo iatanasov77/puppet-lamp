@@ -3,19 +3,13 @@ class vs_lamp (
     String $phpVersion                  = '7.2',
     
     String $mysqllRootPassword          = 'vagrant',
-    String $mysqlPackageName            = '',
-    String $mysqlService                = '',
+    $mysqlPackageName					= false,
     
-    Array $phpModules                   = [],
+    Hash $phpModules                    = {},
     Hash $phpSettings                   = {},
     Boolean $phpunit                    = false,
     Boolean $phpManageRepos             = true,
-    
-    String $xdebugTraceOutputName       = 'trace.out',
-    String $xdebugTraceOutputDir        = '/home/nickname/Xdebug',
-    String $xdebugProfilerEnable        = '0',
-    String $xdebugProfilerOutputName    = 'cachegrind.out',
-    String $xdebugProfilerOutputDir     = '/home/nickname/Xdebug',
+    Hash $phpMyAdmin					= {},
 ) {
 	class { '::vs_lamp::apache':
         apacheModules   => $apacheModules,
@@ -25,7 +19,6 @@ class vs_lamp (
 	class { '::vs_lamp::mysql':
         rootPassword            => $mysqllRootPassword,
         mysqlPackageName        => $mysqlPackageName,
-        mysqlService            => $mysqlService,
     }
 	
 	class { '::vs_lamp::php':
@@ -36,22 +29,17 @@ class vs_lamp (
         phpSettings     => $phpSettings,
     }
 	
-	class { '::vs_lamp::phpextensions':
-        phpModules                  => $phpModules,
-        xdebugTraceOutputName       => $xdebugTraceOutputName,
-        xdebugTraceOutputDir        => $xdebugTraceOutputDir,
-        xdebugProfilerEnable        => $xdebugProfilerEnable,
-        xdebugProfilerOutputName    => $xdebugProfilerOutputName,
-        xdebugProfilerOutputDir     => $xdebugProfilerOutputDir,
-    }
-
     class { '::composer':
         command_name => 'composer',
         target_dir   => '/usr/bin',
         auto_update => true
     }
 
-	class { '::phpmyadmin': 
-	   require  => [ Class['vs_lamp::php'] ],
+	if $phpMyAdmin['source'] {
+		class { '::vs_lamp::phpmyadmin':
+		    source			=> $phpMyAdmin['source'],
+		    targetDirName	=> $phpMyAdmin['targetDirName'],
+		    require			=> [ Class['vs_lamp::php'] ],
+		}
 	}
 }
