@@ -10,6 +10,7 @@ class vs_lamp (
     Boolean $phpunit                    = false,
     Boolean $phpManageRepos             = true,
     Hash $phpMyAdmin					= {},
+    Hash $databases						= {}
 ) {
 	class { '::vs_lamp::apache':
         apacheModules   => $apacheModules,
@@ -19,6 +20,7 @@ class vs_lamp (
 	class { '::vs_lamp::mysql':
         rootPassword            => $mysqllRootPassword,
         mysqlPackageName        => $mysqlPackageName,
+        databases				=> $databases,
     }
 	
 	class { '::vs_lamp::php':
