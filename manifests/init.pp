@@ -3,7 +3,7 @@ class vs_lamp (
     String $phpVersion                  = '7.2',
     
     String $mysqllRootPassword          = 'vagrant',
-    $mysqlPackageName					= false,
+    $mySqlProvider						= false,
     
     Hash $phpModules                    = {},
     Hash $phpSettings                   = {},
@@ -18,9 +18,9 @@ class vs_lamp (
     }
 	
 	class { '::vs_lamp::mysql':
-        rootPassword            => $mysqllRootPassword,
-        mysqlPackageName        => $mysqlPackageName,
-        databases				=> $databases,
+        rootPassword    => $mysqllRootPassword,
+        mySqlProvider	=> $mySqlProvider,
+        databases		=> $databases,
     }
 	
 	class { '::vs_lamp::php':

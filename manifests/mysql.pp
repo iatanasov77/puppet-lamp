@@ -1,6 +1,6 @@
 class vs_lamp::mysql (
+	String $mySqlProvider,
     String $rootPassword	= 'vagrant',
-    $mysqlPackageName		= false,
     Hash $databases			= {},
 ) {
 	# May some bug on CentOS7 only but i dont know
@@ -8,22 +8,24 @@ class vs_lamp::mysql (
         command => 'mkdir -p /var/log/mariadb'
 	}
 	
-	case $mysqlPackageName {
-    	mariadb-server: {
+	case $mySqlProvider {
+    	mariadb: {
+    		$mysqlPackageName	= 'mariadb-server'
     		$mysqlService		= 'mariadb'
     		$manageCoonfigFile	= true
     	}
-    	mysql-server: {
-    		$mysqlService		= 'mysqld'
-    		$manageCoonfigFile	= false
-    	}
-    	mysql-community-server: {
+    	mysql: {
+    		if ( $::operatingsystem == 'centos' and $::operatingsystemmajrelease == '8' ) {
+    			$mysqlPackageName	= 'mysql-server'
+    		} else {
+    			$mysqlPackageName	= 'mysql-community-server'
+    		}
     		$mysqlService		= 'mysqld'
     		$manageCoonfigFile	= false
     	}
     }
 	
-	if $mysqlPackageName {
+	if $mySqlProvider {
 		class { 'mysql::server':
 		   create_root_user		=> true,
 	       root_password		=> $rootPassword,
