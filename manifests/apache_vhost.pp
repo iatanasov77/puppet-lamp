@@ -6,9 +6,45 @@ define vs_lamp::apache_vhost (
     Array $aliases              = [],
     Array $directories          = [],
     String $logLevel            = 'debug',
+    Boolean $ssl				= false,
 ) {
 
-    apache::vhost { "${hostName}":
+	# Check for file don't work
+	#$certExists = find_file( '/etc/pki/tls/certs/apache-selfsigned.crt' )
+	if ( $ssl ) {	#  and $certExists
+		apache::vhost { "${hostName}_ssl":
+			servername 		=> "${hostName}",
+	        serveraliases   => [
+	            "www.${hostName}",
+	        ],
+	        
+	        port            => '443',
+	        ssl				=> true,
+	        ssl_cert 		=> '/etc/pki/tls/certs/apache-selfsigned.crt',
+  			ssl_key  		=> '/etc/pki/tls/private/apache-selfsigned.key',
+	        
+	        serveradmin     => "webmaster@${hostName}",
+	        docroot         => "${documentRoot}", 
+	        override        => 'all',
+	        
+	        aliases         => $aliases,
+	        directories     => $directories + [
+	            {
+	                'path'              => "${documentRoot}",
+	                'allow_override'    => ['All'],
+	                'Require'           => 'all granted',
+	                'rewrites'          => vs_devenv::apache_rewrite_rules( $needRewriteRules )
+	            }
+	        ],
+	        
+	        custom_fragment => $customFragment,
+	        
+	        log_level       => $logLevel,
+	    }
+	}
+	
+	apache::vhost { "${hostName}":
+		servername 		=> "${hostName}",
         serveraliases   => [
             "www.${hostName}",
         ],
