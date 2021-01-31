@@ -46,6 +46,21 @@ class vs_lamp::apache (
 				max_retries       => 24,
 				refreshonly       => true,
 			}
+		} elsif ( "${value}" == "wsgi" ) {
+			if $operatingsystem == 'CentOS' {
+				$packageName	= 'python3-mod_wsgi'
+				$modPath		= '/etc/httpd/modules/mod_wsgi_python3.so'
+				
+				class { "apache::mod::${value}":
+					package_name	=> $packageName,
+					mod_path		=> $modPath,
+					
+					require     	=> Class['vs_django::dependencies'],
+				}
+			} else {
+				class { "apache::mod::${value}": }
+			}
+		
         } else {
         	class { "apache::mod::${value}": }
         }
