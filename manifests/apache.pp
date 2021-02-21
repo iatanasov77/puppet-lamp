@@ -46,7 +46,7 @@ class vs_lamp::apache (
 				max_retries       => 24,
 				refreshonly       => true,
 			}
-		} elsif ( "${value}" == "wsgi" ) {
+		} elsif ( "${value}" == "wsgi" and defined( 'vs_django::dependencies') ) {
 			if $operatingsystem == 'CentOS' {
 				$packageName	= 'python3-mod_wsgi'
 				$modPath		= '/etc/httpd/modules/mod_wsgi_python3.so'
@@ -55,7 +55,8 @@ class vs_lamp::apache (
 					package_name	=> $packageName,
 					mod_path		=> $modPath,
 					
-					require     	=> Class['vs_django::dependencies'],
+					# Ne stava s 'require' kogato e zabranen django ot konfiga, no is sas chaining arrows ne stava
+					#require     	=> Class['vs_django::dependencies'],
 				}
 			} else {
 				class { "apache::mod::${value}": }
