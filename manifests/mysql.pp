@@ -49,7 +49,7 @@ class vs_lamp::mysql (
 	$databases.each |String $key, Hash $db| {
 	    mysql::db { $db['name']:
 	        user     => 'root',
-	        password => 'vagrant',
+	        password => $rootPassword,
 	        host     => 'myprojects.lh',
 	        sql      => $db['dump'],
 	    }
