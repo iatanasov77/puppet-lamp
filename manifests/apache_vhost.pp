@@ -33,7 +33,7 @@ define vs_lamp::apache_vhost (
 	                'path'              => "${documentRoot}",
 	                'allow_override'    => ['All'],
 	                'Require'           => 'all granted',
-	                'rewrites'          => vs_devenv::apache_rewrite_rules( $needRewriteRules )
+	                'rewrites'          => vs_lamp::apache_rewrite_rules( $needRewriteRules )
 	            }
 	        ],
 	        
@@ -60,7 +60,7 @@ define vs_lamp::apache_vhost (
                 'path'              => "${documentRoot}",
                 'allow_override'    => ['All'],
                 'Require'           => 'all granted',
-                'rewrites'          => vs_devenv::apache_rewrite_rules( $needRewriteRules )
+                'rewrites'          => vs_lamp::apache_rewrite_rules( $needRewriteRules )
             }
         ],
         
