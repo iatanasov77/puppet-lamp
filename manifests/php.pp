@@ -6,27 +6,6 @@ class vs_lamp::php (
     Hash $phpModules	= {},
     Hash $phpSettings	= {},
 ) {
-
-	if ( $phpVersion and $::operatingsystem == 'centos' and $::operatingsystemmajrelease == '8' ) {
-		/**
-		 *	dnf module install php:remi-7.4
-		 *  Require: dnf clean packages
-		 *			 dnf module reset php
-		 */
-		Exec { 'Reset PHP Module':
-			command	=> 'dnf module reset -y php',
-		}
-		-> Exec { 'Install PHP Module Stream':
-			command	=> "dnf module install -y php:remi-${phpVersion}",
-		}
-		/* Ne Varshi Rabota
-		-> Package { "php:remi-${phpVersion}":
-            ensure 		=> present,
-            provider	=> dnfmodule,
-        }
-        */
-	}
-
 	if ( $phpVersion ) {
 		class { '::php::globals':
 			php_version		=> "${phpVersion}",
