@@ -30,14 +30,6 @@ class vs_lamp (
         phpunit         => $phpunit,
         phpSettings     => $phpSettings,
     }
-    
-	/* Used in vs_devenv::subsystems
-    class { '::composer':
-        command_name => 'composer',
-        target_dir   => '/usr/bin',
-        auto_update => true
-    }
-	*/
 	
 	if $phpMyAdmin['source'] {
 		class { '::vs_lamp::phpmyadmin':

@@ -7,7 +7,7 @@ class vs_lamp::phpmyadmin (
 	#################################
     # Instalation
     #################################
-	archive { '/tmp/phpMyAdmin-5.0.4-all-languages.zip':
+	archive { "/tmp/${targetDirName}.zip":
 		ensure        	=> present,
 		source        	=> "${source}",
 		extract       	=> true,
