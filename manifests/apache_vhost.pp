@@ -49,10 +49,10 @@ define vs_lamp::apache_vhost (
             "www.${hostName}",
         ],
         
-        port            => '80',
+        port            => 80,
         serveradmin     => "webmaster@${hostName}",
         docroot         => "${documentRoot}", 
-        override        => 'all',
+        override        => ['All'],
         
         aliases         => $aliases,
         directories     => $directories + [
