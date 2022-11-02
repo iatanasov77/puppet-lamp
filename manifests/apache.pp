@@ -67,9 +67,14 @@ class vs_lamp::apache (
         }
     }
     
-    # mod_php
+    # Setup mod_php
+    ###########################
     class {'::apache::mod::php':
         php_version  => "${phpVersion}",
         path         => "modules/libphp${phpVersion}.so",
+    }->
+    file { "/usr/lib64/httpd/modules/libphp${phpVersion}.so":
+        ensure => 'link',
+        target => "/usr/lib64/httpd/modules/libphp${$phpVersion[0]}.so",
     }
 }
