@@ -18,14 +18,14 @@ define vs_lamp::apache_vhost (
 	            "www.${hostName}",
 	        ],
 	        
-	        port            => '443',
+	        port            => 443,
 	        ssl				=> true,
 	        ssl_cert 		=> '/etc/pki/tls/certs/apache-selfsigned.crt',
   			ssl_key  		=> '/etc/pki/tls/private/apache-selfsigned.key',
 	        
 	        serveradmin     => "webmaster@${hostName}",
 	        docroot         => "${documentRoot}", 
-	        override        => 'all',
+	        override        => ['All'],
 	        
 	        aliases         => $aliases,
 	        directories     => $directories + [

@@ -14,7 +14,6 @@ class vs_lamp (
 ) {
 	class { '::vs_lamp::apache':
         apacheModules   => $apacheModules,
-        phpVersion      => $phpVersion,
     }
 	
 	class { '::vs_lamp::mysql':
@@ -29,6 +28,11 @@ class vs_lamp (
         phpModules      => $phpModules,
         phpunit         => $phpunit,
         phpSettings     => $phpSettings,
+    } ->
+    class { '::vs_lamp::setup_mod_php':
+        phpVersion  => "${phpVersion}",
+        require     => [ Class['vs_lamp::php'] ],
+        notify      => Service['httpd'],
     }
 	
 	if $phpMyAdmin['source'] {

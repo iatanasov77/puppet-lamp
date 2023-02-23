@@ -1,6 +1,5 @@
 class vs_lamp::apache (
     Array $apacheModules,
-    String $phpVersion,
 ) {
 	class { 'apache':
 		default_vhost 	=> false,
@@ -14,25 +13,14 @@ class vs_lamp::apache (
 		if ( "${value}" == "ssl" ) {
 			class { "apache::mod::${value}": }
 			
-			########################################################################
-			# Generate a Default SelfSigned Certificate to use from Dev Sites
-			# sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/apache-selfsigned.key -out /etc/pki/tls/certs/apache-selfsigned.crt
-			# Example Values:
-			########################################################################
-			# Country Name (2 letter code) [XX]:BG
-			# State or Province Name (full name) []:Sofia
-			# Locality Name (eg, city) [Default City]:Sofia
-			# Organization Name (eg, company) [Default Company Ltd]:VankoSoft
-			# Organizational Unit Name (eg, section) []:Developement
-			# Common Name (eg, your name or your server's hostname) []:myprojects.lh
-			# Email Address []:i.atanasov77@gmail.com
-			$command	= 'openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-							-keyout /etc/pki/tls/private/apache-selfsigned.key \
-							-out /etc/pki/tls/certs/apache-selfsigned.crt \
-							-subj "/C=BG/ST=Sofia/L=Sofia /O=VankoSoft/OU=Developement/CN=myprojects.lh/emailAddress=i.atanasov77@gmail.com"'
-			
+			file { '/usr/local/bin/OpenSsl_SelfSignedCertificate.sh':
+                ensure  => 'present',
+                mode    => '0777',
+                content => template( 'vs_lamp/OpenSsl_SelfSignedCertificate.sh.erb' ),
+                require => Class["apache::mod::${value}"]
+            } ->
 			exec { "OpenSsl_SelfSignedCertificate":
-				command	=> $command,
+				command	=> '/usr/local/bin/OpenSsl_SelfSignedCertificate.sh',
 				require	=> Class["apache::mod::${value}"]
 			}
 			
@@ -64,28 +52,6 @@ class vs_lamp::apache (
 		
         } else {
         	class { "apache::mod::${value}": }
-        }
-    }
-    
-    ###################################################################################
-    # Setup mod_php
-    ###################################################################################
-    $modPhpVersionLib       = "/usr/lib64/httpd/modules/libphp${$phpVersion[0]}.so"
-    $modPhpVersionLibExists = find_file( $modPhpVersionLib )
-    
-    if ( $modPhpVersionLibExists )  {
-        class {'::apache::mod::php':
-            php_version  => "${phpVersion}",
-            path         => "modules/libphp${phpVersion}.so",
-        }->
-        file { "/usr/lib64/httpd/modules/libphp${phpVersion}.so":
-            ensure => 'link',
-            target => "/usr/lib64/httpd/modules/libphp${$phpVersion[0]}.so",
-        }
-    } else {
-        class {'::apache::mod::php':
-            php_version  => "${phpVersion}",
-            path         => "modules/libphp.so",
         }
     }
 }

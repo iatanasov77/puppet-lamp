@@ -15,7 +15,7 @@ class vs_lamp::mysql (
     		$manageCoonfigFile	= true
     	}
     	mysql: {
-    		if ( $::operatingsystem == 'centos' and $::operatingsystemmajrelease == '8' ) {
+    		if ( $::operatingsystem == 'centos' and Integer( $::operatingsystemmajrelease ) >= 8 ) {
     			$mysqlPackageName	= 'mysql-server'
     		} else {
     			$mysqlPackageName	= 'mysql-community-server'
