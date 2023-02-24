@@ -12,34 +12,30 @@ class vs_lamp::php (
 			#config_root 	=> '/etc/php/7.0',
 		}->
 		class { '::php':
-			manage_repos	=> $phpManageRepos,
-	        fpm          	=> true,
-	        dev          	=> true,
-	        composer     	=> true,
-	        pear         	=> true,
-	        phpunit      	=> $phpunit,
-	        
-	        settings   	=> $phpSettings,
-	        
-	        extensions	=> $phpModules,
-	        
-	        notify  	=> Service['httpd'],
+            manage_repos    => $phpManageRepos,
+            fpm             => true,
+            dev          	=> true,
+            composer     	=> true,
+            pear         	=> true,
+            phpunit      	=> $phpunit,
+            
+            settings        => $phpSettings,
+            
+            extensions	    => $phpModules,
 		}
 	} else {
 		class { '::php':
-	        ensure       	=> latest,
-	        manage_repos	=> $phpManageRepos,
-	        fpm          	=> true,
-	        dev          	=> true,
-	        composer     	=> true,
-	        pear         	=> true,
-	        phpunit      	=> $phpunit,
-	        
-	        settings   	=> $phpSettings,
-	        
-	        extensions	=> $phpModules,
-	        
-	        notify  	=> Service['httpd'],
+            ensure          => latest,
+            manage_repos    => $phpManageRepos,
+            fpm             => true,
+            dev             => true,
+            composer        => true,
+            pear            => true,
+            phpunit         => $phpunit,
+            
+            settings        => $phpSettings,
+            
+            extensions      => $phpModules,
 	    }
 	}
 }

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+########################################################################
+# Generate a Default SelfSigned Certificate to use from Dev Sites
+# sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/apache-selfsigned.key -out /etc/pki/tls/certs/apache-selfsigned.crt
+# Example Values:
+########################################################################
+# Country Name (2 letter code) [XX]:BG
+# State or Province Name (full name) []:Sofia
+# Locality Name (eg, city) [Default City]:Sofia
+# Organization Name (eg, company) [Default Company Ltd]:VankoSoft
+# Organizational Unit Name (eg, section) []:Developement
+# Common Name (eg, your name or your server's hostname) []:myprojects.lh
+# Email Address []:i.atanasov77@gmail.com
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/pki/tls/private/apache-selfsigned.key \
+    -out /etc/pki/tls/certs/apache-selfsigned.crt \
+    -subj "/C=BG/ST=Sofia/L=Sofia /O=VankoSoft/OU=Developement/CN=myprojects.lh/emailAddress=i.atanasov77@gmail.com"
+        
+
+
