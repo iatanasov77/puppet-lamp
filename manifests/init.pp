@@ -29,7 +29,7 @@ class vs_lamp (
         phpunit         => $phpunit,
         phpSettings     => $phpSettings,
     } ->
-    class { '::vs_lamp::setup_mod_php':
+    class { '::vs_lamp::install_mod_php':
         phpVersion  => "${phpVersion}",
         require     => [ Class['vs_lamp::php'] ],
         notify      => Service['httpd'],
