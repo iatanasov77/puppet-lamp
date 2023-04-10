@@ -25,23 +25,18 @@ class vs_lamp::mysql (
     	}
     }
 	
-	if $mySqlProvider {
-		class { 'mysql::server':
-		   create_root_user		=> true,
-	       root_password		=> $rootPassword,
-		   package_name			=> $mysqlPackageName,
-		   service_name			=> $mysqlService,
-		   manage_config_file	=> $manageCoonfigFile,
-		}
-		
+	class { 'mysql::server':
+	   create_root_user		=> true,
+       root_password		=> $rootPassword,
+	   package_name			=> $mysqlPackageName,
+	   service_name			=> $mysqlService,
+	   manage_config_file	=> $manageCoonfigFile,
+	}
+	
+	if ( $mySqlProvider == 'mysql' ) {
 		class {'mysql::client':
 			package_name   	=> 'mysql'
 			#bindings_enable	=> true,
-		}
-	} else {
-		class { 'mysql::server':
-		   create_root_user    => true,
-	       root_password       => $rootPassword,
 		}
 	}
 	
