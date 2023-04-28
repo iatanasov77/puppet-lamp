@@ -10,7 +10,7 @@ function vs_lamp::apache_vhost_fpm_proxy( $fpmSocket )
            ProxySet disablereuse=off
         </Proxy>
     
-        <FilesMatch \.php$>
+        <FilesMatch \\.php$>
             SetHandler proxy:fcgi://php-fpm
         </FilesMatch>
         "
