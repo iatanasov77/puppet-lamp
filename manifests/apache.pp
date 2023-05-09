@@ -1,7 +1,9 @@
 class vs_lamp::apache (
+    String $apacheVersion  = 'installed',   # Latest Version
     Array $apacheModules,
 ) {
 	class { 'apache':
+        package_ensure  => "${apacheVersion}",
 		default_vhost 	=> false,
 		default_mods	=> false,
 		mpm_module 		=> 'prefork',

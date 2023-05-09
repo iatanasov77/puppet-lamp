@@ -1,5 +1,6 @@
 class vs_lamp (
     Array $apacheModules                = [],
+    String $apacheVersion               = 'installed',   # Latest Version
     String $phpVersion                  = '7.2',
     
     String $mysqllRootPassword          = 'vagrant',
@@ -13,6 +14,7 @@ class vs_lamp (
     Hash $databases						= {}
 ) {
 	class { '::vs_lamp::apache':
+        apacheVersion   => $apacheVersion,
         apacheModules   => $apacheModules,
     }
 	
