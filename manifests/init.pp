@@ -11,7 +11,9 @@ class vs_lamp (
     Boolean $phpunit                    = false,
     Boolean $phpManageRepos             = true,
     Hash $phpMyAdmin					= {},
-    Hash $databases						= {}
+    Hash $databases						= {},
+    
+    Hash $customExtensions              = {},
 ) {
 	class { '::vs_lamp::apache':
         apacheVersion   => $apacheVersion,
@@ -44,4 +46,12 @@ class vs_lamp (
 		    require			=> [ Class['vs_lamp::php'] ],
 		}
 	}
+	
+	class { '::vs_lamp::custom_extensions':
+        customExtensions    => $customExtensions,
+        require             => [
+            Class['vs_lamp::php'], 
+            Class['vs_lamp::apache']
+        ],
+    }
 }
