@@ -12,10 +12,8 @@
 # Organizational Unit Name (eg, section) []:Developement
 # Common Name (eg, your name or your server's hostname) []:myprojects.lh
 # Email Address []:i.atanasov77@gmail.com
+
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/pki/tls/private/apache-selfsigned.key \
-    -out /etc/pki/tls/certs/apache-selfsigned.crt \
-    -subj "/C=BG/ST=Sofia/L=Sofia /O=VankoSoft/OU=Developement/CN=myprojects.lh/emailAddress=i.atanasov77@gmail.com"
-        
-
-
+    -keyout "/etc/pki/tls/private/$1.key" \
+    -out "/etc/pki/tls/certs/$1.crt" \
+    -subj "/C=BG/ST=Sofia/L=Sofia /O=VankoSoft/OU=Developement/CN=$1/emailAddress=i.atanasov77@gmail.com"

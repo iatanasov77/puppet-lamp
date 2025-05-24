@@ -7,11 +7,16 @@ define vs_lamp::apache_vhost (
     Array $directories          = [],
     String $logLevel            = 'debug',
     Boolean $ssl				= false,
+    String $sslHost             = 'myprojects.lh',
 ) {
-
-	# Check for file don't work
-	#$certExists = find_file( '/etc/pki/tls/certs/apache-selfsigned.crt' )
-	if ( $ssl ) {	#  and $certExists
+    if ( $ssl ) {
+        $certKey    = "/etc/pki/tls/private/${sslHost}.key"
+        $certFile   = "/etc/pki/tls/certs/${sslHost}.crt"
+        
+        exec { "OpenSsl_SelfSignedCertificate_${hostName}":
+            command => "/usr/local/bin/OpenSsl_SelfSignedCertificate.sh ${sslHost}",
+        } ->
+		
 		apache::vhost { "${hostName}_ssl":
 			servername 		=> "${hostName}",
 	        serveraliases   => [
@@ -20,8 +25,8 @@ define vs_lamp::apache_vhost (
 	        
 	        port            => 443,
 	        ssl				=> true,
-	        ssl_cert 		=> '/etc/pki/tls/certs/apache-selfsigned.crt',
-  			ssl_key  		=> '/etc/pki/tls/private/apache-selfsigned.key',
+	        ssl_cert 		=> "${certFile}",
+  			ssl_key  		=> "${certKey}",
 	        
 	        serveradmin     => "webmaster@${hostName}",
 	        docroot         => "${documentRoot}", 
