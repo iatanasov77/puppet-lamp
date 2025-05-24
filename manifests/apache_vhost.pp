@@ -13,8 +13,9 @@ define vs_lamp::apache_vhost (
         $certKey    = "/etc/pki/tls/private/${sslHost}.key"
         $certFile   = "/etc/pki/tls/certs/${sslHost}.crt"
         
-        exec { "OpenSsl_SelfSignedCertificate_${hostName}":
-            command => "/usr/local/bin/OpenSsl_SelfSignedCertificate.sh ${sslHost}",
+        vs_lamp::create_ssl_certificate{ "CreateSelfSignedCertificate_${host['hostName']}":
+            hostName    => $hostName,
+            sslHost     => $sslHost,
         } ->
 		
 		apache::vhost { "${hostName}_ssl":
