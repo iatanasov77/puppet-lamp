@@ -13,7 +13,7 @@ define vs_lamp::apache_vhost (
         $certKey    = "/etc/pki/tls/private/${sslHost}.key"
         $certFile   = "/etc/pki/tls/certs/${sslHost}.crt"
         
-        vs_lamp::create_ssl_certificate{ "CreateSelfSignedCertificate_${host['hostName']}":
+        vs_lamp::create_ssl_certificate{ "CreateSelfSignedCertificate_${hostName}":
             hostName    => $hostName,
             sslHost     => $sslHost,
         } ->
