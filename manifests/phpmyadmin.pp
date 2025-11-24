@@ -2,7 +2,7 @@ class vs_lamp::phpmyadmin (
 	String $source,
 	String $targetDirName,
 ) {
-	$blowfishKey      = md5( "${::fqdn}${::ipaddress}" )
+	$blowfishKey      = md5( "${facts['networking']['fqdn']}${facts['networking']['ip']}" )
 	
 	#################################
     # Instalation

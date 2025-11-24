@@ -16,8 +16,8 @@ class vs_lamp::mysql (
     	}
     	mysql: {
     		if (
-    		  ( $::operatingsystem == 'centos' or $operatingsystem == 'AlmaLinux' ) and
-    		  Integer( $::operatingsystemmajrelease ) >= 8
+    		  ( $facts['os']['name'] == 'centos' or $facts['os']['name'] == 'AlmaLinux' ) and
+    		  Integer( $facts['os']['release']['major'] ) >= 8
     		) {
     			$mysqlPackageName	= 'mysql-server'
     		} else {
