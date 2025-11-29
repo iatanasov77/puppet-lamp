@@ -22,7 +22,7 @@ class vs_lamp::apache (
                 require => Class["apache::mod::${value}"]
             }
 		} elsif ( "${value}" == "wsgi" and defined( 'vs_django::dependencies') ) {
-			if ( $operatingsystem == 'CentOS' or $operatingsystem == 'AlmaLinux' ) {
+			if ( $facts['os']['name'] == 'CentOS' or $facts['os']['name'] == 'AlmaLinux' ) {
 				$packageName	= 'python3-mod_wsgi'
 				$modPath		= '/etc/httpd/modules/mod_wsgi_python3.so'
 				
