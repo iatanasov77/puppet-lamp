@@ -7,40 +7,70 @@ class vs_lamp::mysql (
 	exec { "Create path: '/var/log/mariadb'":
         command => 'mkdir -p /var/log/mariadb'
 	}
-	
-	case $mySqlProvider {
-    	mariadb: {
-    		$mysqlPackageName	= 'mariadb-server'
-    		$mysqlService		= 'mariadb'
-    		$manageCoonfigFile	= true
+    
+    case $mySqlProvider {
+        mariadb: {
+            $mysqlServerPackageName = 'mariadb-server'
+            $mysqlClientPackageName = 'mariadb-client'
+            $mysqlService           = 'mariadb'
+            
+            $manageCoonfigFile      = true
+            $manageService          = true
+            
+            $createRootUser         = true
+        }
+        mariadb_new: {
+            ###############################################################################################
+            # Manual: https://truehost.com/support/knowledge-base/how-to-install-mariadb-on-almalinux/
+            ###############################################################################################
+            $mysqlServerPackageName = 'MariaDB-server'
+            $mysqlClientPackageName = 'MariaDB-client'
+            $mysqlService           = 'mariadb'
+            
+            $manageCoonfigFile      = true
+            $manageService          = false
+            
+            $createRootUser         = false
     	}
-    	mysql: {
+        mysql: {
     		if (
     		  ( $facts['os']['name'] == 'centos' or $facts['os']['name'] == 'AlmaLinux' ) and
     		  Integer( $facts['os']['release']['major'] ) >= 8
     		) {
-    			$mysqlPackageName	= 'mysql-server'
+    			$mysqlServerPackageName	= 'mysql-server'
     		} else {
-    			$mysqlPackageName	= 'mysql-community-server'
+    			$mysqlServerPackageName	= 'mysql-community-server'
     		}
-    		$mysqlService		= 'mysqld'
-    		$manageCoonfigFile	= false
+            
+            $mysqlClientPackageName = 'mysql'
+            $mysqlService		    = 'mysqld'
+            
+            $manageCoonfigFile	    = false
+            $manageService          = true
+            
+            $createRootUser         = true
     	}
     }
 	
-	class { 'mysql::server':
-	   create_root_user		=> true,
-       root_password		=> $rootPassword,
-	   package_name			=> $mysqlPackageName,
-	   service_name			=> $mysqlService,
-	   manage_config_file	=> $manageCoonfigFile,
+	class { 'vs_lamp::mysql::repo':
+       mySqlProvider => $mySqlProvider,
+    }
+    
+	-> class { 'mysql::server':
+        create_root_user    => $createRootUser,
+        root_password       => $createRootUser ? { true => $rootPassword, default => 'UNSET' },
+        
+        package_name        => $mysqlServerPackageName,
+        service_name        => $mysqlService,
+        manage_config_file  => $manageCoonfigFile,
+        
+        #service_manage      => $manageService,
+        service_enabled     => $manageService,
 	}
 	
-	if ( $mySqlProvider == 'mysql' ) {
-		class {'mysql::client':
-			package_name   	=> 'mysql'
-			#bindings_enable	=> true,
-		}
+	-> class {'mysql::client':
+        package_name        => $mysqlClientPackageName,
+		#bindings_enable	=> true,
 	}
 	
 	# Create Databases

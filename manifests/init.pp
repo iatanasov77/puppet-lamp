@@ -43,7 +43,7 @@ class vs_lamp (
 		class { '::vs_lamp::phpmyadmin':
 		    source			=> $phpMyAdmin['source'],
 		    targetDirName	=> $phpMyAdmin['targetDirName'],
-		    require			=> [ Class['vs_lamp::php'] ],
+		    require			=> [ Class['vs_lamp::php'], Class['vs_lamp::mysql'] ],
 		}
 	}
 	
