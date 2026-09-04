@@ -1,5 +1,6 @@
 class vs_lamp::mysql::repo (
-    String $mySqlProvider = 'mariadb'
+    String $mySqlProvider   = 'mariadb'
+    String $mysqlVersion    = '10.11'
 ) {
     case $facts['os']['name'] {
     	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
@@ -9,7 +10,9 @@ class vs_lamp::mysql::repo (
                 }
                 
                 if $mySqlProvider == 'mariadb_new' {
-                    include vs_lamp::mysql::mariadb_repo
+                    class { 'vs_lamp::mysql::mariadb_repo':
+                        mariadbVersion => $mysqlVersion,
+                    }
                 }
 		    }
 	    }

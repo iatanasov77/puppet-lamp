@@ -1,6 +1,7 @@
 class vs_lamp::mysql (
-	String $mySqlProvider,
-    String $rootPassword	= 'vagrant',
+    String $mySqlProvider,
+    String $mysqlVersion    = '10.11'
+    String $rootPassword    = 'vagrant',
     Hash $databases			= {},
 ) {
 	# May some bug on CentOS7 only but i dont know
@@ -22,6 +23,7 @@ class vs_lamp::mysql (
         mariadb_new: {
             ###############################################################################################
             # Manual: https://truehost.com/support/knowledge-base/how-to-install-mariadb-on-almalinux/
+            # Use This Puppet Module: https://github.com/edestecd/puppet-mariadb
             ###############################################################################################
             $mysqlServerPackageName = 'MariaDB-server'
             $mysqlClientPackageName = 'MariaDB-client'
@@ -53,7 +55,8 @@ class vs_lamp::mysql (
     }
 	
 	class { 'vs_lamp::mysql::repo':
-       mySqlProvider => $mySqlProvider,
+       mySqlProvider    => $mySqlProvider,
+       mysqlVersion     =>  '10.11',
     }
     
 	-> class { 'mysql::server':

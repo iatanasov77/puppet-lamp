@@ -1,3 +1,7 @@
+###############################################################################################
+# Manual: https://truehost.com/support/knowledge-base/how-to-install-mariadb-on-almalinux/
+# Use This Puppet Module: https://github.com/edestecd/puppet-mariadb
+###############################################################################################
 class vs_lamp::mysql::mariadb_repo (
     String $mariadbVersion = '10.11'
 ) {
