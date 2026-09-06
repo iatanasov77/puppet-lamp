@@ -1,19 +1,22 @@
 class vs_lamp (
-    Array $apacheModules                = [],
-    String $apacheVersion               = 'installed',   # Latest Version
-    String $phpVersion                  = '7.2',
+    Array $apacheModules         = [],
+    String $apacheVersion        = 'installed',   # Latest Version
     
-    String $mysqllRootPassword          = 'vagrant',
-    $mySqlProvider						= false,
+    String $remiRepo            = '',
+    String $phpVersion          = '7.2',
+    Hash $phpModules            = {},
+    Hash $phpSettings           = {},
+    Boolean $phpunit            = false,
+    Boolean $phpManageRepos     = true,
     
-    Hash $phpModules                    = {},
-    Hash $phpSettings                   = {},
-    Boolean $phpunit                    = false,
-    Boolean $phpManageRepos             = true,
-    Hash $phpMyAdmin					= {},
-    Hash $databases						= {},
+    String $mysqllRootPassword  = 'vagrant',
+    String $mySqlProvider       = 'mariadb',
+    String $mysqlVersion        = '10.11',
     
-    Hash $customExtensions              = {},
+    Hash $phpMyAdmin            = {},
+    Hash $databases             = {},
+    
+    Hash $customExtensions      = {},
 ) {
 	class { '::vs_lamp::apache':
         apacheVersion   => $apacheVersion,
@@ -23,12 +26,15 @@ class vs_lamp (
 	class { '::vs_lamp::mysql':
         rootPassword    => $mysqllRootPassword,
         mySqlProvider	=> $mySqlProvider,
+        mysqlVersion    => $mysqlVersion,
         databases		=> $databases,
     }
 	
-	class { '::vs_lamp::php':
+    class { '::vs_lamp::php':
         phpManageRepos  => $phpManageRepos,
+        remiRepo        => $remiRepo,
         phpVersion      => $phpVersion,
+        
         phpModules      => $phpModules,
         phpunit         => $phpunit,
         phpSettings     => $phpSettings,
@@ -43,7 +49,7 @@ class vs_lamp (
 		class { '::vs_lamp::phpmyadmin':
 		    source			=> $phpMyAdmin['source'],
 		    targetDirName	=> $phpMyAdmin['targetDirName'],
-		    require			=> [ Class['vs_lamp::php'], Class['vs_lamp::mysql'] ],
+		    require			=> [ Class['vs_lamp::apache'], Class['vs_lamp::php'], Class['vs_lamp::mysql'] ],
 		}
 	}
 	

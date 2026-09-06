@@ -1,17 +1,26 @@
 
 class vs_lamp::php (
-    String $phpVersion,
+    String $remiRepo    = '',
+    String $phpVersion  = '7.4',
+    
+    
     Boolean $phpManageRepos,
     Boolean $phpunit	= false,
     Hash $phpModules	= {},
     Hash $phpSettings	= {},
 ) {
-	if ( $phpVersion ) {
-		class { '::php::globals':
-			php_version		=> "${phpVersion}",
-			#config_root 	=> '/etc/php/7.0',
-		}->
-		class { '::php':
+    if ( $phpVersion ) {
+        class { 'vs_lamp::php::php_module':
+            remiReleaseRpm  => $remiRepo,
+            phpVersion      => $phpVersion,
+            stage           => 'install-dependencies',
+        }
+        
+        class { '::php::globals':
+        	php_version		=> "${phpVersion}",
+        	#config_root 	=> '/etc/php/7.0',
+        }->
+        class { '::php':
             manage_repos    => $phpManageRepos,
             fpm             => true,
             dev          	=> true,
@@ -22,9 +31,9 @@ class vs_lamp::php (
             settings        => $phpSettings,
             
             extensions	    => $phpModules,
-		}
-	} else {
-		class { '::php':
+        }
+    } else {
+        class { '::php':
             ensure          => latest,
             manage_repos    => $phpManageRepos,
             fpm             => true,
@@ -36,6 +45,6 @@ class vs_lamp::php (
             settings        => $phpSettings,
             
             extensions      => $phpModules,
-	    }
+        }
 	}
 }
