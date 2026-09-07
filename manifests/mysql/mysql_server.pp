@@ -28,7 +28,8 @@ class vs_lamp::mysql::mysql_server (
         $manageCoonfigFile      = false
     } else {
         $mysqlServerPackageName = 'mariadb-server'
-        $mysqlClientPackageName = 'mariadb-client'
+        #$mysqlClientPackageName = 'mariadb-client'
+        $mysqlClientPackageName = 'mariadb'
         $mysqlService           = 'mariadb'
         
         $manageCoonfigFile      = true
