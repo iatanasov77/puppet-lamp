@@ -17,6 +17,8 @@ class vs_lamp (
     Hash $databases             = {},
     
     Hash $customExtensions      = {},
+    Hash $mkCert                = {},
+    Boolean $useMkCert          = false,
 ) {
 	class { '::vs_lamp::apache':
         apacheVersion   => $apacheVersion,
@@ -59,5 +61,11 @@ class vs_lamp (
             Class['vs_lamp::php'], 
             Class['vs_lamp::apache']
         ],
+    }
+    
+    if ( $useMkCert ) {
+        class { '::vs_lamp::mkcert':
+            mkCert  => $mkCert,
+        }
     }
 }

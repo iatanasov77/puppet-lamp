@@ -8,15 +8,24 @@ define vs_lamp::apache_vhost (
     String $logLevel            = 'debug',
     Boolean $ssl				= false,
     String $sslHost             = 'myprojects.lh',
+    Hash $mkCert                = {},
+    Boolean $useMkCert          = false,
 ) {
     if ( $ssl ) {
-        $certKey    = "/etc/pki/tls/private/${sslHost}.key"
-        $certFile   = "/etc/pki/tls/certs/${sslHost}.crt"
         
-        vs_lamp::create_ssl_certificate{ "CreateSelfSignedCertificate_${hostName}":
-            hostName    => $hostName,
-            sslHost     => $sslHost,
-        } ->
+        if ( $useMkCert ) {
+            $certKey    = "${mkCert['caRoot']}/${mkCert['caHost']}-key.pem"
+            $certFile   = "${mkCert['caRoot']}/${mkCert['caHost']}.pem"
+        
+        } else {
+            $certKey    = "/etc/pki/tls/private/${sslHost}.key"
+            $certFile   = "/etc/pki/tls/certs/${sslHost}.crt"
+            
+            vs_lamp::create_ssl_certificate{ "CreateSelfSignedCertificate_${hostName}":
+                hostName    => $hostName,
+                sslHost     => $sslHost,
+            }
+		}
 		
 		apache::vhost { "${hostName}_ssl":
 			servername 		=> "${hostName}",
@@ -47,6 +56,7 @@ define vs_lamp::apache_vhost (
 	        
 	        log_level       => $logLevel,
 	    }
+        
 	}
 	
 	apache::vhost { "${hostName}":
