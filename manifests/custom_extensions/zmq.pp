@@ -1,5 +1,5 @@
 class vs_lamp::custom_extensions::zmq (
-    Hash $config    = {},
+    Hash $config = {},
 ) {
     if ( $config['version'] == 'master' ) {
         $packageSource  = "https://github.com/zeromq/php-zmq/archive/refs/heads/master.tar.gz"
